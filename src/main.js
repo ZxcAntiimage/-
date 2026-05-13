@@ -1,21 +1,21 @@
 const menuToggle = document.getElementById('menuToggle');
-      const mainNav = document.getElementById('mainNav');
-      if (menuToggle && mainNav) {
-        menuToggle.addEventListener('click', () => {
-          mainNav.classList.toggle('header__nav--open');
-        });
-        document.addEventListener('click', (e) => {
-          if (!mainNav.contains(e.target) && !menuToggle.contains(e.target) && mainNav.classList.contains('header__nav--open')) {
-            mainNav.classList.remove('header__nav--open');
-          }
-        });
-        const navLinks = mainNav.querySelectorAll('.header__nav-link');
-        navLinks.forEach(link => {
-          link.addEventListener('click', () => {
-            mainNav.classList.remove('header__nav--open');
-          });
-        });
-      }
+const mainNav = document.getElementById('mainNav');
+if (menuToggle && mainNav) {
+  menuToggle.addEventListener('click', () => {
+    mainNav.classList.toggle('header__nav--open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!mainNav.contains(e.target) && !menuToggle.contains(e.target) && mainNav.classList.contains('header__nav--open')) {
+      mainNav.classList.remove('header__nav--open');
+    }
+  });
+  const navLinks = mainNav.querySelectorAll('.header__nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mainNav.classList.remove('header__nav--open');
+    });
+  });
+}
 (function() {
   const track = document.getElementById('reviewsTrack');
   const prevBtn = document.getElementById('prevBtn');
@@ -59,15 +59,19 @@ const menuToggle = document.getElementById('menuToggle');
     let buttonsHtml = '';
     for (let i = 0; i < totalCards; i++) {
       const activeClass = i === currentIndex ? 'pagination__number--active bg-gradient-to-r from-[#ff4d4d] to-[#d11717] text-white' : 'bg-white text-[#263573]';
-      buttonsHtml += `<button class="pagination__number w-[40px] h-[40px] rounded-full shadow-md hover:bg-gradient-to-r hover:from-[#ff4d4d] hover:to-[#d11717] hover:text-white transition-all duration-300 cursor-pointer border border-gray-200 font-medium ${activeClass}" data-index="${i}">${i + 1}</button>`;
+      buttonsHtml += `<button class="pagination__number w-[40px] h-[40px] rounded-full shadow-md hover:bg-gradient-to-r from-[#ff4d4d] to-[#d11717] hover:text-white transition-all duration-300 cursor-pointer border border-gray-200 font-medium ${activeClass}" data-index="${i}">${i + 1}</button>`;
     }
     paginationContainer.innerHTML = buttonsHtml;
     
     document.querySelectorAll('.pagination__number').forEach(btn => {
       btn.addEventListener('click', () => {
         if (isTransitioning) return;
-        currentIndex = parseInt(btn.dataset.index);
-        updateCarousel();
+        const newIndex = parseInt(btn.dataset.index);
+        if (newIndex !== currentIndex) {
+          currentIndex = newIndex;
+          updateCarousel();
+          updatePaginationButtons();
+        }
       });
     });
   }
@@ -77,6 +81,7 @@ const menuToggle = document.getElementById('menuToggle');
     if (currentIndex > 0) {
       currentIndex--;
       updateCarousel();
+      updatePaginationButtons();
     }
   });
   
@@ -85,6 +90,7 @@ const menuToggle = document.getElementById('menuToggle');
     if (currentIndex < totalCards - 1) {
       currentIndex++;
       updateCarousel();
+      updatePaginationButtons();
     }
   });
   
